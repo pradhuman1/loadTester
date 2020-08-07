@@ -1,0 +1,23 @@
+{
+  "name": "loadTester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pradhuman1/loadTester.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pradhuman1/loadTester/issues"
+  },
+  "homepage": "https://github.com/pradhuman1/loadTester#readme",
+  "dependencies": {
+    "puppeteer": "^5.2.1"
+  }
+}
