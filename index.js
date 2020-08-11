@@ -24,15 +24,8 @@ const puppeteer = require('puppeteer');
 
     var firstMeaningfulPaint = getRelTime('FirstMeaningfulPaint');
 
-    // const performanceTiming = JSON.parse(
-    //     await page.evaluate(() => JSON.stringify(window.performance.timing))
-    // );
+    
 
-    // const startTime = performanceTiming.navigationStart;
-
-
-    // console.log(startTime);
-    // console.log(performanceMetrics);
     console.log("firstMeaningfulPaint"+" : "+firstMeaningfulPaint + "sec");
 
     await browser.close();
