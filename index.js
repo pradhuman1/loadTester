@@ -8,19 +8,27 @@ const puppeteer = require('puppeteer');
     const client = await page.target().createCDPSession();
     await client.send('Performance.enable');
 
-    await page.goto('https://web.dev/first-meaningful-paint/');
+    await page.goto('https://github.com/addyosmani/puppeteer-webperf#first-contentful-paint');
 
     
 
 
     var firstMean = 0;
     var performanceMetrics;
+    
 
-    const firstPaint = JSON.parse(
-        await page.evaluate(() =>
-        JSON.stringify(performance.getEntriesByName('first-paint'))
-        )
-    );
+    var firstPaint =await calcPaint(page);
+
+    async function calcPaint(page){
+        const Page = page;
+        await page.screenshot({path: './screenshots/first-paint.png'});                    
+        return await page.evaluate(async (Page) =>{
+            return JSON.stringify(performance.getEntriesByName('first-paint'))
+        });
+    }
+
+    firstPaint = JSON.parse(firstPaint);
+
 
     const firstContentfulPaint = JSON.parse(
         await page.evaluate(() =>
@@ -28,32 +36,10 @@ const puppeteer = require('puppeteer');
         )
     );
 
-    // async function pageEvaluationTime(el){
-    //     return promise = new Promise(async (res,rej)=>{
-    //         try{
-    //             var t =await JSON.parse(
-    //                         page.evaluate(async () =>
-    //                         await JSON.stringify(performance.getEntriesByName('first-paint'))
-    //                     )
-    //                 )
-    //             console.log("t : "+t);
-    //             res(t);
-    //         }catch(err){
-    //             rej(err);
-    //         }
-    //     })   
-    // }
-    // console.log(pageEvaluationTime('first-paint'));
-    // var res = pageEvaluationTime('first-paint');
-    // res.then((result)=>{
-    //     console.log(result);
-    // }).catch((e)=>{
-    //     console.log("e : " + e);
-    // });
-
     while(firstMean === 0){
         performanceMetrics = await client.send('Performance.getMetrics');        
         await page.waitFor(200);
+        await page.screenshot({path: './screenshots/meaninigful-paint.png'});                    
         firstMean = getTime('FirstMeaningfulPaint');    
     }
 
