@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/pradhuman1/loadTester#readme",
   "dependencies": {
+    "lighthouse": "^6.2.0",
     "puppeteer": "^5.2.1"
   }
 }
