@@ -10,21 +10,25 @@ app.use(express.json());
 
 app.use(cors());
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Origin", "*");
 
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
     next();
 });
 
-app.get('/url',async (req,res)=>{
-    // var url = req.body;
-    console.log(req);
+app.post('/url', async (req, res) => {
+    var body = req.body;
+    console.log(req.body);
+    var url = body.testUrl;
+    var TestResult = await getIndexes(url);
+    console.log("Res : " + JSON.stringify(TestResult));
+    res.send(JSON.stringify(TestResult));
     res.end();
 })
 
 
-async function getIndexes(){
+async function getIndexes(url) {
 
 
     const browser = await puppeteer.launch();
@@ -57,7 +61,7 @@ async function getIndexes(){
     //     auditConfig
     // )
 
-    await page.goto('http://www.geekhaven.epizy.com/GeekHaven-2020/');
+    await page.goto(url);
 
 
     // speedline('http://www.geekhaven.epizy.com/GeekHaven-2020/').then(results => {
@@ -108,11 +112,11 @@ async function getIndexes(){
 
     var firstMeaningfulPaint = getRelTime('FirstMeaningfulPaint');
 
-    // const largestContentful = audits['largest-contentful-paint']['displayValue'];
-    // const speedIndex = audits['speed-index']['displayValue'];
-    // const blockingTime = audits['total-blocking-time']['displayValue'];
-    // const firstCpuIdle = audits['first-cpu-idle']['displayValue'];
-    // const interactive = audits['interactive']['displayValue'];
+    const largestContentful = audits['largest-contentful-paint']['displayValue'];
+    const speedIndex = audits['speed-index']['displayValue'];
+    const blockingTime = audits['total-blocking-time']['displayValue'];
+    const firstCpuIdle = audits['first-cpu-idle']['displayValue'];
+    const interactive = audits['interactive']['displayValue'];
 
     // console.log("Largest Contentful Paint"+" : "+largestContentful +"sec");
     // console.log("Speed Index"+" : "+speedIndex +"sec");
@@ -124,11 +128,22 @@ async function getIndexes(){
     console.log("firstContentfulPaint" + " : " + firstContentfulPaint[0].startTime / 1000 + "sec");
     console.log("firstMeaningfulPaint" + " : " + firstMeaningfulPaint + "sec");
 
+    const indexs = function (firstMeaningfulPaint, firstPaint, firstContentfulPaint) {
+        this.firstContentfulPaint = firstContentfulPaint;
+        this.firstPaint = firstPaint;
+        this.firstMeaningfulPaint = firstMeaningfulPaint;
+    }
 
+    var result = new indexs(firstMeaningfulPaint, firstPaint[0].startTime / 1000, firstContentfulPaint[0].startTime / 1000);
 
     await browser.close();
-};
+    return result;
 
-app.listen(4000,()=>{
+};
+// getIndexes();
+
+app.listen(4000, () => {
     console.log("Listening on port 4000")
 })
+
+
