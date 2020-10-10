@@ -1,4 +1,4 @@
-const getIndexesfuntion = require('./ResultIndex/indexes.js');
+const { getIndexes } = require('./ResultIndex/indexes.js');
 
 const express = require('express');
 const app = express();
@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
 app.post('/url', async (req, res) => {
     var body = req.body;
     var url = body.testUrl;
-    var TestResult = await getIndexesfuntion.getIndexes(url);
+    var TestResult = await getIndexes(url);
     res.send(JSON.stringify(TestResult));
     res.end();
 })
